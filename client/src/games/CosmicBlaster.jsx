@@ -310,7 +310,7 @@ export default function CosmicBlaster() {
           <div
             className="relative mx-auto overflow-hidden rounded-[32px] border border-pink-light/70 shadow-soft"
             style={{
-              width: 'min(92vw, 420px)',
+              width: 'min(100%, 420px)',
               aspectRatio: `${WIDTH} / ${HEIGHT}`,
               background:
                 'radial-gradient(circle at top, rgba(199,125,255,0.45), rgba(29,11,47,0.98) 52%), linear-gradient(180deg, #160924 0%, #08040f 100%)',

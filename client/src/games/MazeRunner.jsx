@@ -227,7 +227,7 @@ export default function MazeRunner() {
             className="mx-auto grid gap-[2px]"
             style={{
               gridTemplateColumns: `repeat(${run.maze.length}, minmax(0, 1fr))`,
-              width: `min(92vw, ${Math.min(run.maze.length * 20, 540)}px)`,
+              width: `min(100%, ${Math.min(run.maze.length * 20, 540)}px)`,
             }}
           >
             {run.maze.flatMap((row, y) =>

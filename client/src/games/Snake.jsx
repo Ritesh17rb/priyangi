@@ -89,7 +89,7 @@ export default function Snake() {
       <p className="text-xs text-ink-light mb-3">Arrow keys, swipe the board, or use the buttons.</p>
       <div className="grid mx-auto bg-pink-pale rounded-2xl overflow-hidden touch-none"
         onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
-        style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)`, width: 'min(90vw, 400px)', aspectRatio: '1' }}>
+        style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)`, width: 'min(100%, 400px)', aspectRatio: '1' }}>
         {Array.from({ length: COLS * ROWS }).map((_, i) => {
           const x = i % COLS, y = Math.floor(i / COLS);
           const isHead = snake[0].x === x && snake[0].y === y;

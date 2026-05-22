@@ -260,7 +260,7 @@ export default function Minesweeper() {
           className="mx-auto grid gap-1"
           style={{
             gridTemplateColumns: `repeat(${config.cols}, minmax(0, 1fr))`,
-            width: `min(92vw, ${Math.min(config.cols * 34, 560)}px)`,
+            width: `min(100%, ${Math.min(config.cols * 34, 560)}px)`,
           }}
         >
           {board.flat().map((cell) => (

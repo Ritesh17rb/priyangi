@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import TicTacToe from '../games/TicTacToe.jsx';
 import Memory from '../games/Memory.jsx';
@@ -15,126 +15,147 @@ import TriviaQuiz from '../games/TriviaQuiz.jsx';
 import Minesweeper from '../games/Minesweeper.jsx';
 import MazeRunner from '../games/MazeRunner.jsx';
 import CosmicBlaster from '../games/CosmicBlaster.jsx';
+import WhackAMole from '../games/WhackAMole.jsx';
+import BubblePop from '../games/BubblePop.jsx';
+import QuickMath from '../games/QuickMath.jsx';
+import ColorMatch from '../games/ColorMatch.jsx';
+import SlidingPuzzle from '../games/SlidingPuzzle.jsx';
+import NumberRush from '../games/NumberRush.jsx';
 
 const GAMES = [
-  { id: 'cosmic', name: 'Cosmic Blaster X', badge: 'NEW', family: 'Arcade', difficulty: 'Expert', desc: 'Neon shooter with charge pulse and live dodging', cmp: CosmicBlaster, featured: true },
-  { id: 'maze', name: 'Neon Maze Escape', badge: 'NEW', family: 'Adventure', difficulty: 'Medium', desc: 'Generated mazes, star unlocks, and path racing', cmp: MazeRunner, featured: true },
-  { id: 'mines', name: 'Minesweeper Deluxe', badge: 'NEW', family: 'Puzzle', difficulty: 'Expert', desc: 'Safe first click, flags, and rising board sizes', cmp: Minesweeper, featured: true },
-  { id: 'tictactoe', name: 'Tic-Tac-Toe', badge: 'XO', family: 'Classic', difficulty: 'Easy', desc: '2-player classic', cmp: TicTacToe },
-  { id: 'connect4', name: 'Connect 4', badge: 'C4', family: 'Classic', difficulty: 'Easy', desc: '4 in a row wins', cmp: Connect4 },
-  { id: 'memory', name: 'Memory Match', badge: 'MEM', family: 'Puzzle', difficulty: 'Easy', desc: 'Flip and match the pairs', cmp: Memory },
-  { id: 'simon', name: 'Simon Says', badge: 'SEQ', family: 'Arcade', difficulty: 'Easy', desc: 'Repeat the pattern', cmp: SimonSays },
-  { id: 'word', name: 'Word Scramble', badge: 'WRD', family: 'Word', difficulty: 'Easy', desc: 'Unscramble cute words', cmp: WordScramble },
-  { id: 'hangman', name: 'Hangman', badge: 'HNG', family: 'Word', difficulty: 'Medium', desc: 'Guess before time runs out', cmp: Hangman },
-  { id: 'trivia', name: 'K-Pop Trivia', badge: 'POP', family: 'Trivia', difficulty: 'Medium', desc: '10 idol questions', cmp: TriviaQuiz },
-  { id: 'rps', name: 'Rock Paper Scissors', badge: 'RPS', family: 'Classic', difficulty: 'Easy', desc: 'Battle the bot', cmp: RockPaperScissors },
-  { id: 'reaction', name: 'Reaction Time', badge: 'RT', family: 'Arcade', difficulty: 'Easy', desc: 'Measure your reflexes', cmp: ReactionTime },
-  { id: '2048', name: '2048', badge: '2048', family: 'Puzzle', difficulty: 'Medium', desc: 'Slide and combine tiles', cmp: Game2048 },
-  { id: 'snake', name: 'Snake', badge: 'SNK', family: 'Arcade', difficulty: 'Medium', desc: 'Eat and grow', cmp: Snake },
-  { id: 'doodle', name: 'Doodle Pad', badge: 'ART', family: 'Creative', difficulty: 'Easy', desc: 'Free-draw and scribble', cmp: Doodle },
+  { id: 'whack', name: 'Whack-a-Sparkle', emoji: '✨', tint: 'from-pink to-purple-light', family: 'Arcade', difficulty: 'Easy', desc: 'Tap the sparkle before it hops', cmp: WhackAMole, isNew: true },
+  { id: 'bubble', name: 'Bubble Pop', emoji: '🫧', tint: 'from-purple-light to-pink', family: 'Arcade', difficulty: 'Easy', desc: 'Pop floating bubbles fast', cmp: BubblePop, isNew: true },
+  { id: 'slide', name: 'Sliding Puzzle', emoji: '🧩', tint: 'from-pink to-purple', family: 'Puzzle', difficulty: 'Medium', desc: 'Slide tiles 1–8 into order', cmp: SlidingPuzzle, isNew: true },
+  { id: 'numrush', name: 'Number Rush', emoji: '🔢', tint: 'from-pink-light to-purple-light', family: 'Arcade', difficulty: 'Easy', desc: 'Tap 1 to 16 against the clock', cmp: NumberRush, isNew: true },
+  { id: 'math', name: 'Quick Math', emoji: '➗', tint: 'from-purple to-pink', family: 'Brain', difficulty: 'Medium', desc: 'Solve sums before time runs out', cmp: QuickMath, isNew: true },
+  { id: 'color', name: 'Color Match', emoji: '🌈', tint: 'from-pink to-purple-light', family: 'Brain', difficulty: 'Medium', desc: 'Word vs ink — match or not?', cmp: ColorMatch, isNew: true },
+  { id: 'cosmic', name: 'Cosmic Blaster X', emoji: '🚀', tint: 'from-purple to-pink', family: 'Arcade', difficulty: 'Expert', desc: 'Neon shooter with charge pulse', cmp: CosmicBlaster },
+  { id: 'maze', name: 'Neon Maze Escape', emoji: '🌀', tint: 'from-pink-light to-purple', family: 'Adventure', difficulty: 'Medium', desc: 'Generated mazes and star runs', cmp: MazeRunner },
+  { id: 'mines', name: 'Minesweeper Deluxe', emoji: '💣', tint: 'from-purple to-pink-light', family: 'Puzzle', difficulty: 'Expert', desc: 'Safe first click, flags, big boards', cmp: Minesweeper },
+  { id: 'tictactoe', name: 'Tic-Tac-Toe', emoji: '⭕', tint: 'from-pink-light to-pink', family: 'Classic', difficulty: 'Easy', desc: '2-player classic', cmp: TicTacToe },
+  { id: 'connect4', name: 'Connect 4', emoji: '🔴', tint: 'from-purple-light to-purple', family: 'Classic', difficulty: 'Easy', desc: 'Four in a row wins', cmp: Connect4 },
+  { id: 'memory', name: 'Memory Match', emoji: '🃏', tint: 'from-pink to-purple', family: 'Puzzle', difficulty: 'Easy', desc: 'Flip and match the pairs', cmp: Memory },
+  { id: 'simon', name: 'Simon Says', emoji: '🎵', tint: 'from-purple to-pink-light', family: 'Arcade', difficulty: 'Easy', desc: 'Repeat the glowing pattern', cmp: SimonSays },
+  { id: 'word', name: 'Word Scramble', emoji: '🔤', tint: 'from-pink-light to-purple', family: 'Word', difficulty: 'Easy', desc: 'Unscramble cute words', cmp: WordScramble },
+  { id: 'hangman', name: 'Hangman', emoji: '🎈', tint: 'from-pink to-purple-light', family: 'Word', difficulty: 'Medium', desc: 'Guess the word in time', cmp: Hangman },
+  { id: 'trivia', name: 'K-Pop Trivia', emoji: '💜', tint: 'from-purple to-pink', family: 'Trivia', difficulty: 'Medium', desc: '10 idol questions', cmp: TriviaQuiz },
+  { id: 'rps', name: 'Rock Paper Scissors', emoji: '✊', tint: 'from-pink to-pink-light', family: 'Classic', difficulty: 'Easy', desc: 'Battle the bot', cmp: RockPaperScissors },
+  { id: 'reaction', name: 'Reaction Time', emoji: '⚡', tint: 'from-purple-light to-pink', family: 'Arcade', difficulty: 'Easy', desc: 'Measure your reflexes', cmp: ReactionTime },
+  { id: '2048', name: '2048', emoji: '🔟', tint: 'from-pink to-purple', family: 'Puzzle', difficulty: 'Medium', desc: 'Slide and combine tiles', cmp: Game2048 },
+  { id: 'snake', name: 'Snake', emoji: '🐍', tint: 'from-purple to-pink-light', family: 'Arcade', difficulty: 'Medium', desc: 'Eat, grow, don\'t crash', cmp: Snake },
+  { id: 'doodle', name: 'Doodle Pad', emoji: '🎨', tint: 'from-pink-light to-purple-light', family: 'Creative', difficulty: 'Easy', desc: 'Free-draw and scribble', cmp: Doodle },
 ];
 
-const FILTERS = ['all', 'Arcade', 'Puzzle', 'Word', 'Classic', 'Adventure', 'Trivia', 'Creative'];
+const FILTERS = ['all', 'Arcade', 'Puzzle', 'Brain', 'Word', 'Classic', 'Adventure', 'Trivia', 'Creative'];
 
 export default function Games() {
   const [active, setActive] = useState(null);
   const [filter, setFilter] = useState('all');
+  const [query, setQuery] = useState('');
   const activeGame = GAMES.find((game) => game.id === active);
   const Active = activeGame?.cmp;
-  const visibleGames = filter === 'all' ? GAMES : GAMES.filter((game) => game.family === filter);
+
+  const visibleGames = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return GAMES.filter((game) => {
+      if (filter !== 'all' && game.family !== filter) return false;
+      if (q && !`${game.name} ${game.desc} ${game.family}`.toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [filter, query]);
+
+  function openGame(id) {
+    setActive(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function surprise() {
+    openGame(GAMES[Math.floor(Math.random() * GAMES.length)].id);
+  }
 
   return (
-    <div className="max-w-6xl mx-auto px-5 pt-10 pb-16">
-      <div className="card mb-8 overflow-hidden">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
-          <div>
-            <div className="flex flex-wrap gap-2">
-              <span className="chip">15 games</span>
-              <span className="chip">Arcade + puzzle lab</span>
-              <span className="chip">3 new advanced drops</span>
-            </div>
-            <h1 className="section-title text-left !mb-3 !mt-4">
-              Game <span className="shimmer-text">Zone</span>
-            </h1>
-            <p className="max-w-3xl text-ink-light">
-              Fast classics, bigger puzzle runs, and a few heavier games that feel more like mini arcade cabinets than quick widgets.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 text-center text-sm">
-            <div className="rounded-2xl bg-pink-pale px-4 py-3">
-              <div className="text-xs uppercase tracking-wider text-ink-light">Featured</div>
-              <div className="font-display text-2xl text-pink">3</div>
-            </div>
-            <div className="rounded-2xl bg-pink-pale px-4 py-3">
-              <div className="text-xs uppercase tracking-wider text-ink-light">Families</div>
-              <div className="font-display text-2xl text-pink">7</div>
-            </div>
-            <div className="rounded-2xl bg-pink-pale px-4 py-3">
-              <div className="text-xs uppercase tracking-wider text-ink-light">Modes</div>
-              <div className="font-display text-2xl text-pink">Solo + Duo</div>
-            </div>
-          </div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-5 pt-8 sm:pt-10 pb-16">
+      <div className="card mb-6">
+        <div className="flex flex-wrap gap-2">
+          <span className="chip">{GAMES.length} games</span>
+          <span className="chip">Mobile-first arcade</span>
+          <span className="chip">6 fresh drops</span>
         </div>
+        <h1 className="section-title text-left !mb-2 !mt-3">
+          Game <span className="shimmer-text">Zone</span>
+        </h1>
+        <p className="text-ink-light">Tap-friendly classics, brain teasers and arcade runs — all built for your phone.</p>
+        {!active && (
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search games…"
+              className="input !py-2 flex-1"
+            />
+            <button onClick={surprise} className="btn-purple whitespace-nowrap">🎲 Surprise me</button>
+          </div>
+        )}
       </div>
 
       {!active && (
         <>
-          <div className="mb-5 flex flex-wrap gap-2">
+          <div className="mb-5 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
             {FILTERS.map((item) => (
               <button
                 key={item}
                 onClick={() => setFilter(item)}
-                className={filter === item ? 'btn-primary !py-2 !px-4' : 'btn-ghost !py-2 !px-4'}
+                className={`whitespace-nowrap !py-1.5 !px-3 text-sm ${filter === item ? 'btn-primary' : 'btn-ghost'}`}
               >
-                {item === 'all' ? 'All games' : item}
+                {item === 'all' ? 'All' : item}
               </button>
             ))}
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {visibleGames.map((game, index) => (
-              <motion.button
-                key={game.id}
-                onClick={() => setActive(game.id)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                whileHover={{ y: -4, scale: 1.03 }}
-                className="card flex min-h-52 flex-col justify-between text-left"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-pink to-purple text-lg font-black tracking-[0.25em] text-white">
-                    {game.badge}
+          {visibleGames.length === 0 ? (
+            <div className="card py-12 text-center text-ink-light">No games match your search.</div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
+              {visibleGames.map((game, index) => (
+                <motion.button
+                  key={game.id}
+                  onClick={() => openGame(game.id)}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(index * 0.03, 0.4) }}
+                  whileTap={{ scale: 0.97 }}
+                  className="card !p-0 flex flex-col overflow-hidden text-left"
+                >
+                  <div className={`relative flex h-24 items-center justify-center bg-gradient-to-br sm:h-28 ${game.tint}`}>
+                    <span className="text-5xl drop-shadow-[0_3px_8px_rgba(0,0,0,0.22)] sm:text-6xl">{game.emoji}</span>
+                    {game.isNew && (
+                      <span className="absolute left-1.5 top-1.5 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-pink">
+                        New
+                      </span>
+                    )}
                   </div>
-                  <div className="flex flex-wrap justify-end gap-2 text-[11px] font-bold uppercase tracking-wider">
-                    {game.featured && <span className="rounded-full bg-pink px-2 py-1 text-white">Featured</span>}
-                    <span className="rounded-full bg-purple/10 px-2 py-1 text-purple">{game.family}</span>
+                  <div className="flex flex-1 flex-col p-3">
+                    <div className="font-display text-base leading-tight text-ink sm:text-lg">{game.name}</div>
+                    <div className="mt-0.5 flex-1 text-xs text-ink-light">{game.desc}</div>
+                    <div className="mt-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-wide text-ink-light">
+                      <span>{game.family}</span>
+                      <span className="text-pink">Play →</span>
+                    </div>
                   </div>
-                </div>
-
-                <div>
-                  <div className="font-display text-2xl shimmer-text">{game.name}</div>
-                  <div className="mt-1 text-sm text-ink-light">{game.desc}</div>
-                </div>
-
-                <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-ink-light">
-                  <span>{game.difficulty}</span>
-                  <span>Open</span>
-                </div>
-              </motion.button>
-            ))}
-          </div>
+                </motion.button>
+              ))}
+            </div>
+          )}
         </>
       )}
 
       {active && Active && (
         <div>
-          <button onClick={() => setActive(null)} className="btn-ghost mb-5">Back to all games</button>
-          <div className="mb-5 flex flex-wrap items-center gap-2 text-sm">
+          <button onClick={() => setActive(null)} className="btn-ghost mb-4">← All games</button>
+          <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
             <span className="chip">{activeGame.family}</span>
             <span className="chip">{activeGame.difficulty}</span>
-            {activeGame.featured && <span className="chip">Featured</span>}
+            {activeGame.isNew && <span className="chip">New</span>}
           </div>
           <Active />
         </div>
