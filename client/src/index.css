@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --pink: #ff6b9d;
+  --pink-light: #ffb3d1;
+  --pink-pale: #fff0f7;
+  --purple: #c77dff;
+  --purple-light: #e8b4ff;
+  --cream: #fff5fb;
+  --ink: #3d1a47;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--ink);
+  background: linear-gradient(180deg, #fff5fb 0%, #ffe8f5 60%, #f9eaff 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a { touch-action: manipulation; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #fff5fb; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--pink-light), var(--purple-light));
+  border-radius: 6px;
+}
+
+@layer components {
+  .btn { @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-semibold transition-all duration-200; }
+  .btn-primary { @apply btn bg-pink text-white shadow-pinky hover:scale-105 hover:bg-pink-light; }
+  .btn-ghost { @apply btn bg-white/70 backdrop-blur border-2 border-pink-light text-ink hover:bg-pink-pale; }
+  .btn-purple { @apply btn bg-purple text-white shadow-soft hover:scale-105; }
+  .card { @apply bg-white/80 backdrop-blur rounded-3xl shadow-soft p-6 border border-pink-light/40; }
+  .input { @apply w-full rounded-2xl border-2 border-pink-light/60 bg-white/80 px-4 py-2.5 outline-none focus:border-pink focus:ring-2 focus:ring-pink-light/40 transition; }
+  .label { @apply block text-sm font-semibold text-ink-light mb-1; }
+  .chip { @apply inline-block px-3 py-1 rounded-full text-xs font-semibold bg-pink-pale text-pink border border-pink-light; }
+  .section-title { @apply font-display text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-2; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, var(--pink), var(--purple), var(--pink));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-anim 4s linear infinite;
+}
+@keyframes shimmer-anim {
+  to { background-position: 200% center; }
+}
+
+.glow {
+  box-shadow: 0 0 30px rgba(255, 107, 157, 0.4), 0 0 60px rgba(199, 125, 255, 0.25);
+}
+
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff, transparent 70%);
+  pointer-events: none;
+}
