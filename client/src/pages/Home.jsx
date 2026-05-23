@@ -6,7 +6,7 @@ import DailyAffirmation from '../components/DailyAffirmation.jsx';
 const tiles = [
   { to: '/articles', icon: '📝', title: 'Articles', desc: 'Stories, thoughts & diaries', color: 'from-pink to-pink-light' },
   { to: '/drawings', icon: '🎨', title: 'Drawings', desc: 'My art gallery', color: 'from-purple to-purple-light' },
-  { to: '/games', icon: '🎮', title: 'Games', desc: '21 games, built for mobile', color: 'from-pink to-purple' },
+  { to: '/games', icon: '🎮', title: 'Games', desc: '22 games + AI quizzes', color: 'from-pink to-purple' },
   { to: '/music', icon: '🎵', title: 'Music', desc: 'BLACKPINK, K-pop, vibes', color: 'from-purple to-pink' },
   { to: '/youtube', icon: '▶️', title: 'YouTube', desc: 'Search and play in-app', color: 'from-pink to-purple-light' },
   { to: '/study', icon: '📚', title: 'Study', desc: 'Notes & focus timer', color: 'from-pink-light to-purple-light' },

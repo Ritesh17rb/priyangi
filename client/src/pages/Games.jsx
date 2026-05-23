@@ -21,8 +21,10 @@ import QuickMath from '../games/QuickMath.jsx';
 import ColorMatch from '../games/ColorMatch.jsx';
 import SlidingPuzzle from '../games/SlidingPuzzle.jsx';
 import NumberRush from '../games/NumberRush.jsx';
+import AIQuiz from '../games/AIQuiz.jsx';
 
 const GAMES = [
+  { id: 'aiquiz', name: 'AI Quiz', emoji: '🧠', tint: 'from-pink to-purple', family: 'Brain', difficulty: 'Any', desc: 'Quiz on any topic you pick', cmp: AIQuiz, isNew: true },
   { id: 'whack', name: 'Whack-a-Sparkle', emoji: '✨', tint: 'from-pink to-purple-light', family: 'Arcade', difficulty: 'Easy', desc: 'Tap the sparkle before it hops', cmp: WhackAMole, isNew: true },
   { id: 'bubble', name: 'Bubble Pop', emoji: '🫧', tint: 'from-purple-light to-pink', family: 'Arcade', difficulty: 'Easy', desc: 'Pop floating bubbles fast', cmp: BubblePop, isNew: true },
   { id: 'slide', name: 'Sliding Puzzle', emoji: '🧩', tint: 'from-pink to-purple', family: 'Puzzle', difficulty: 'Medium', desc: 'Slide tiles 1–8 into order', cmp: SlidingPuzzle, isNew: true },
@@ -79,7 +81,7 @@ export default function Games() {
         <div className="flex flex-wrap gap-2">
           <span className="chip">{GAMES.length} games</span>
           <span className="chip">Mobile-first arcade</span>
-          <span className="chip">6 fresh drops</span>
+          <span className="chip">7 fresh drops · AI quiz</span>
         </div>
         <h1 className="section-title text-left !mb-2 !mt-3">
           Game <span className="shimmer-text">Zone</span>

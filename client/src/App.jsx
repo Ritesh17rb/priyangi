@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import Intro from './components/Intro.jsx';
 import Navbar from './components/Navbar.jsx';
 import SparkleBackground from './components/SparkleBackground.jsx';
+import ChatBot from './components/ChatBot.jsx';
 import Home from './pages/Home.jsx';
 import Articles from './pages/Articles.jsx';
 import ArticleDetail from './pages/ArticleDetail.jsx';
@@ -71,6 +72,7 @@ export default function App() {
             <div className="font-script text-2xl text-pink">Priyangi's Magical World ✨</div>
             <div className="text-sm mt-1">Made with 💖 — sparkle every day.</div>
           </footer>
+          <ChatBot />
         </>
       )}
     </>

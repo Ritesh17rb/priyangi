@@ -15,6 +15,7 @@ import contactRoutes from './routes/contacts.js';
 import schoolRoutes from './routes/school.js';
 import youtubeRoutes from './routes/youtube.js';
 import uploadRoutes from './routes/uploads.js';
+import aiRoutes from './routes/ai.js';
 
 const app = express();
 
@@ -36,12 +37,14 @@ app.get('/api/health', (_req, res) =>
 );
 
 app.use('/api/youtube', youtubeRoutes);
+app.use('/api/ai', aiRoutes);
 
 export function requiresDatabase(pathname = '') {
   return !(
     pathname === '/api/health' ||
     pathname === '/api/youtube' ||
-    pathname.startsWith('/api/youtube/')
+    pathname.startsWith('/api/youtube/') ||
+    pathname.startsWith('/api/ai/')
   );
 }
 
